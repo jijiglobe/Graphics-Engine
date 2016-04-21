@@ -1,80 +1,13 @@
 import math
 
-def transPush(matList):
-    holder = new_matrix()
-    for x in range(4):
-        for y in range(4):
-            holder[x][y] = matList[-1][x][y]
-    matList.append(holder)
-
-        
-def transPop(matrix_list):
-    matrix_list.pop(len(matrix_list) - 1)
-
 def make_bezier():
-    b = new_matrix()
-    ident(b)
-    b[0][0] = -1
-    b[1][0] = 3
-    b[2][0] = -3
-    b[3][0] = 1
-
-    b[0][1] = 3
-    b[1][1] = -6
-    b[2][1] = 3
-    b[3][1] = 0
-
-    b[0][2] = -3
-    b[1][2] = 3
-    b[2][2] = 0
-    b[3][2] = 0
-
-    b[0][3] = 1
-    b[3][3] = 0
-    return b
+    pass
 
 def make_hermite():
-    h = new_matrix()
-    ident(h)
-    h[0][0] = 2
-    h[1][0] = -2
-    h[2][0] = 1
-    h[3][0] = 1
-
-    h[0][1] = -3
-    h[1][1] = 3
-    h[2][1] = -2
-    h[3][1] = -1
-
-    h[0][2] = 0
-    h[1][2] = 0
-    h[2][2] = 1
-    h[3][2] = 0
-
-    h[0][3] = 1
-    h[3][3] = 0
-    return h
+    pass
 
 def generate_curve_coefs( p1, p2, p3, p4, t ):
-    coefs = new_matrix(4, 1)
-
-    if t == 'bezier':
-        inverse = make_bezier()
-        coefs[0][0] = p1
-        coefs[0][1] = p2
-        coefs[0][2] = p3
-        coefs[0][3] = p4
-    else:
-        inverse = make_hermite()
-        coefs[0][0] = p1
-        coefs[0][1] = p3
-        coefs[0][2] = p2 - p1
-        coefs[0][3] = p4 - p3
-
-    matrix_mult( inverse, coefs )
-    return coefs
-
-    
+    pass
 
 def make_translate( x, y, z ):
     t = new_matrix()
