@@ -71,14 +71,14 @@ def run(filename):
             if command[0] == "box":
                 add_box(temporary,command[1],command[2],command[3],command[4],command[5],command[6])
             elif command[0] == "sphere":
-                add_sphere(temporary,command[1],command[2],0,command[3],5)
+                add_sphere(temporary,command[1],command[2],command[3],command[4],5)
             elif command[0] == "torus":
-                add_torus(temporary,command[1],command[2],0,command[3],command[4],5)
+                add_torus(temporary,command[1],command[2],command[3],command[4],command[5],5)
             elif command[0] == "line":
                 add_edge(temporary,command[1],command[2],command[3],command[4],command[5],command[6])
             matrix_mult(stack[-1],temporary)
             draw_polygons(temporary,screen,color)
-            print "draw function\n"
+            print "draw function\n drew: "+str(temporary)+"\n"
         elif command[0] in otherFunctions:
             if command[0] == "save":
                 save_extension(screen,command[1])
