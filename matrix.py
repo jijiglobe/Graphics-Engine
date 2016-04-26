@@ -1,16 +1,5 @@
 import math
 
-def transPush(matList):
-    holder = new_matrix()
-    for x in range(4):
-        for y in range(4):
-            holder[x][y] = matList[-1][x][y]
-    matList.append(holder)
-
-        
-def transPop(matrix_list):
-    matrix_list.pop(len(matrix_list) - 1)
-
 def make_bezier():
     b = new_matrix()
     ident(b)

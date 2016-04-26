@@ -1,17 +1,9 @@
-from display import *
-from draw import *
-from parser import *
-from matrix import *
+from script import run
 import sys
 
-screen = new_screen()
-color = [ 0, 255, 0 ]
-edges = []
-holder = new_matrix()
-ident(holder)
-transform = [holder]
 if len(sys.argv) == 2:
-    f = open(sys.argv[1])
-
-parse_file( f, edges, transform, screen, color )
-f.close()
+    run(sys.argv[1])
+elif len(sys.argv) == 1:
+    run(raw_input("please enter the filename of an mdl script file: \n"))
+else:
+    print "Too many arguments."
