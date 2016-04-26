@@ -65,9 +65,25 @@ def run(filename):
             elif command[0] == "scale":
                 matrix_mult(make_scale(command[1],command[2],command[3]),stack[-1])
             print "modifying function\ncurrent top: "+str(stack[-1])+"\n"
+
         elif command[0] in drawFunctions:
+            temporary = []
+            if command[0] == "box":
+                add_box(temporary,command[1],command[2],command[3],command[4],command[5],command[6])
+            elif command[0] == "sphere":
+                add_sphere(temporary,command[1],command[2],0,command[3],5)
+            elif command[0] == "torus":
+                add_torus(temporary,command[1],command[2],0,command[3],command[4],5)
+            elif command[0] == "line":
+                add_edge(temporary,command[1],command[2],command[3],command[4],command[5],command[6])
+            matrix_mult(stack[-1],temporary)
+            draw_polygons(temporary,screen,color)
             print "draw function\n"
         elif command[0] in otherFunctions:
+            if command[0] == "save":
+                save_extension(screen,command[1])
+            elif command[0] == "display":
+                display(screen)
             print "other function\n"
         else:
             print "command not recognized...\n"
