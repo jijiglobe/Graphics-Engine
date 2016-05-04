@@ -1,3 +1,5 @@
+import math
+print "math imported"
 import mdl
 print "mdl imported"
 from display import *
@@ -41,7 +43,7 @@ def run(filename):
         if command[0] in stackFunctions:
             if command[0] == "push":
                 copy = []
-                for x in stack[0]:
+                for x in stack[-1]:
                     empty = []
                     copy.append(empty)
                     for y in x:
@@ -57,11 +59,11 @@ def run(filename):
                 transform = make_translate(command[1],command[2],command[3])
             elif command[0] =="rotate":
                 if command[1] == "x": 
-                    transform = make_rotX(command[2])
+                    transform = make_rotX(float(command[2]) * (math.pi/180))
                 elif command[1] == "y":
-                    transform = make_rotY(command[2])
+                    transform = make_rotY(float(command[2]) * (math.pi/180))
                 elif command[1] == "z":
-                    transform = make_rotZ(command[2])
+                    transform = make_rotZ(float(command[2]) * (math.pi/180))
             elif command[0] == "scale":
                 transform = make_scale(command[1],command[2],command[3])
             matrix_mult(stack[-1],transform)
@@ -78,6 +80,7 @@ def run(filename):
                 add_torus(temporary,command[1],command[2],command[3],command[4],command[5],5)
             elif command[0] == "line":
                 add_edge(temporary,command[1],command[2],command[3],command[4],command[5],command[6])
+            print "multiplying:\ntop: "+str(stack[-1])+"\ntemp: "+str(temporary)
             matrix_mult(stack[-1],temporary)
             draw_polygons(temporary,screen,color)
             print "draw function\n drew: "+str(temporary)+"\n"
