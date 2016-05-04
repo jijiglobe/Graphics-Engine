@@ -60,7 +60,7 @@ def generate_curve_coefs( p1, p2, p3, p4, t ):
         coefs[0][2] = p2 - p1
         coefs[0][3] = p4 - p3
 
-    matrix_t( inverse, coefs )
+    matrix_mult( inverse, coefs )
     return coefs
 
     
@@ -123,14 +123,6 @@ def print_matrix( matrix ):
             s+= str(matrix[c][r]) + ' '
         s+= '\n'
     print s
-
-def ident( matrix ):
-    for r in range( len( matrix[0] ) ):
-        for c in range( len( matrix ) ):
-            if r == c:
-                matrix[c][r] = 1
-            else:
-                matrix[c][r] = 0
 
 def scalar_mult( matrix, x ):
     for r in range( len( matrix[0] ) ):

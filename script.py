@@ -54,16 +54,18 @@ def run(filename):
  
         elif command[0] in modFunctions:
             if command[0] == "move":
-                matrix_mult(make_translate(command[1],command[2],command[3]),stack[-1])
+                transform = make_translate(command[1],command[2],command[3])
             elif command[0] =="rotate":
                 if command[1] == "x": 
-                    matrix_mult(make_rotX(command[2]),stack[-1])
+                    transform = make_rotX(command[2])
                 elif command[1] == "y":
-                    matrix_mult(make_rotY(command[2]),stack[-1])
+                    transform = make_rotY(command[2])
                 elif command[1] == "z":
-                    matrix_mult(make_rotZ(command[2]),stack[-1])
+                    transform = make_rotZ(command[2])
             elif command[0] == "scale":
-                matrix_mult(make_scale(command[1],command[2],command[3]),stack[-1])
+                transform = make_scale(command[1],command[2],command[3])
+            matrix_mult(stack[-1],transform)
+            stack[-1] = transform
             print "modifying function\ncurrent top: "+str(stack[-1])+"\n"
 
         elif command[0] in drawFunctions:
