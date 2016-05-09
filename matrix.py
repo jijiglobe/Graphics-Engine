@@ -141,6 +141,7 @@ def scalar_mult( matrix, x ):
 def matrix_mult( m1, m2 ):
     
     t = new_matrix( 4, 1 )
+
     for c in range( len( m2 ) ):        
         
         for r in range(4):
@@ -148,3 +149,5 @@ def matrix_mult( m1, m2 ):
             
         for r in range(4):
             m2[c][r] = m1[0][r] * t[0][0] + m1[1][r] * t[0][1] + m1[2][r] * t[0][2] + m1[3][r] * t[0][3]
+
+
