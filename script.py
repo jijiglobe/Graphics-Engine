@@ -53,7 +53,7 @@ import mdl
 from display import *
 from matrix import *
 from draw import *
-
+from sys import exit
 
 """======== first_pass( commands, symbols ) ==========
 
@@ -72,8 +72,42 @@ from draw import *
 
   jdyrlandweaver
   ==================== """
+basename = ""
+frames = 0
+knobs = []
+
 def first_pass( commands ):
-        
+    global frames
+    global knobs
+    global basename
+
+    found = False
+    knobNames=[]
+    for command in commands:
+        if command[0] == "frames":
+            frames = int(command[1])
+            found = True
+        elif command[0] == "basename":
+            print "new basename: "+str(command[1])
+            basename +=command[1]
+            found = True
+        elif command[0] == "vary":
+            knobNames.append(command[1])
+            found = True
+    if found and frames == 0:
+        print "frames set to 0... program exiting..."
+        exit()
+    if found and knobNames == []:
+        print "knobs not found... program exiting..."
+        exit()
+    if found and basename == "":
+        print "no basename found...\n defaulting basename to lazyBum"
+        exit()
+    for x in range(frames):
+        knobs.append({})
+        for name in knobNames:
+            knobs[x][name] = 0
+    return found
 
 """======== second_pass( commands ) ==========
 
@@ -93,9 +127,43 @@ def first_pass( commands ):
   appropirate value. 
   ===================="""
 def second_pass( commands, num_frames ):
+    global knobs
+    global frames
+    global basename
 
+    for command in commands:
 
+        if command[0] == "vary":
+            print "vary found"
+            knobName = command[1]
+            startFrame = int(command[2])
+            endFrame = int(command[3])
+            startVal = float(command[4])
+            endVal = float(command[5])
+            deltaFrames = endFrame - endVal
+            deltaVals = endVal - startVal
+            delta = deltaVals / deltaFrames
+            print endFrame
+            print startFrame
+
+            if endFrame >= 0 and startFrame < endFrame and endFrame < num_frames:
+                cur = startFrame
+                val = startVal
+                while cur < endFrame:
+                    knobs[cur][knobName] = val
+                    val += delta
+                    cur += 1                
+            else:
+                print "vary frames out of range. Exiting..."
+                exit()
+        else:
+            print "not a vary"
+            
 def run(filename):
+    global basename
+    global frames
+    global knobs
+
     """
     This function runs an mdl script
     """
@@ -113,7 +181,11 @@ def run(filename):
         
     stack = [ tmp ]
     screen = new_screen()    
-        
+    first_pass(commands)
+    second_pass(commands,frames)
+    print frames
+    print knobs
+    print "basename " +basename
     for command in commands:
         if command[0] == "pop":
             stack.pop()
@@ -201,4 +273,3 @@ def run(filename):
                 
             matrix_mult( stack[-1], t )
             stack[-1] = t
-            
