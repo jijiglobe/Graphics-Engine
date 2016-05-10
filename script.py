@@ -176,7 +176,14 @@ def runCommands(localCommands, frameNum, animated):
     screen = new_screen()    
 
     if animated:
-        commands.append(["save",basename+str(frameNum)+".png"])
+        if frameNum == 0:
+            commands.append(["save",basename+"000"+str(frameNum)+".png"])
+        elif frameNum < 10:
+            commands.append(["save",basename+"00"+str(frameNum)+".png"])
+        elif frameNum < 100:
+            commands.append(["save",basename+"0"+str(frameNum)+".png"])
+        elif frameNum < 1000:
+            commands.append(["save",basename+str(frameNum)+".png"])
         com = 0
         for command in commands:
             p = 0
@@ -185,6 +192,14 @@ def runCommands(localCommands, frameNum, animated):
                     #print "param: "+ str(param)
                     #print commands[com][p]
                     commands[com][p] = knobs[frameNum][param]
+                    p2 = 1
+                    while p2 < len(commands[com]) - 1:
+                        print "p2: "+str(p2)
+                        try:
+                            commands[com][p2] = knobs[frameNum][param] * float(commands[com][p2])
+                        except:
+                            pass
+                        p2+=1
                 p+=1
             com+=1
     print commands
@@ -264,6 +279,7 @@ def runCommands(localCommands, frameNum, animated):
             stack[-1] = t
             
         if command[0] == "rotate":
+            print command
             angle = command[2] * (math.pi / 180)
 
             if command[1] == 'x':
@@ -298,11 +314,14 @@ def run(filename):
     for x in commands:
         commands[cur] = list(commands[cur])
         cur+=1
+
     animated = first_pass(commands)
     second_pass(commands,frames)
     print frames
     print knobs
     print "basename " +basename
+
+#    runCommands(commands, 30, animated)
 
     for frameNum in range(frames):
         runCommands(commands,frameNum,animated)
