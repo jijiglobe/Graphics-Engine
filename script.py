@@ -48,7 +48,7 @@
   ========================="""
 
 
-
+import copy
 import mdl
 from display import *
 from matrix import *
@@ -140,7 +140,7 @@ def second_pass( commands, num_frames ):
             endFrame = int(command[3])
             startVal = float(command[4])
             endVal = float(command[5])
-            deltaFrames = endFrame - endVal
+            deltaFrames = 1.0 + endFrame - endVal
             deltaVals = endVal - startVal
             delta = deltaVals / deltaFrames
             print endFrame
@@ -149,7 +149,7 @@ def second_pass( commands, num_frames ):
             if endFrame >= 0 and startFrame < endFrame and endFrame < num_frames:
                 cur = startFrame
                 val = startVal
-                while cur < endFrame:
+                while cur <= endFrame:
                     knobs[cur][knobName] = val
                     val += delta
                     cur += 1                
@@ -158,34 +158,37 @@ def second_pass( commands, num_frames ):
                 exit()
         else:
             print "not a vary"
-            
-def run(filename):
+
+def runCommands(localCommands, frameNum, animated):
+    commands = copy.deepcopy(localCommands)
+    print "FRAME: "+str(frameNum)
+#    print knobs[frameNum]
+
     global basename
     global frames
     global knobs
 
-    """
-    This function runs an mdl script
-    """
     color = [255, 255, 255]
     tmp = new_matrix()
     ident( tmp )
-
-    p = mdl.parseFile(filename)
-
-    if p:
-        (commands, symbols) = p
-    else:
-        print "Parsing failed."
-        return
-        
+    
     stack = [ tmp ]
     screen = new_screen()    
-    first_pass(commands)
-    second_pass(commands,frames)
-    print frames
-    print knobs
-    print "basename " +basename
+
+    if animated:
+        commands.append(["save",basename+str(frameNum)+".png"])
+        com = 0
+        for command in commands:
+            p = 0
+            for param in command:
+                if param in knobs[frameNum]:
+                    #print "param: "+ str(param)
+                    #print commands[com][p]
+                    commands[com][p] = knobs[frameNum][param]
+                p+=1
+            com+=1
+    print commands
+
     for command in commands:
         if command[0] == "pop":
             stack.pop()
@@ -218,7 +221,6 @@ def run(filename):
             add_box(m, *command[1:])
             matrix_mult(stack[-1], m)
             draw_polygons( m, screen, color )
-
         if command[0] == "line":
             m = []
             add_edge(m, *command[1:])
@@ -273,3 +275,34 @@ def run(filename):
                 
             matrix_mult( stack[-1], t )
             stack[-1] = t
+
+            
+def run(filename):
+    global basename
+    global frames
+    global knobs
+
+    """
+    This function runs an mdl script
+    """
+    p = mdl.parseFile(filename)
+
+    if p:
+        (commands, symbols) = p
+    else:
+        print "Parsing failed."
+        return
+
+    commands = list(commands)
+    cur = 0
+    for x in commands:
+        commands[cur] = list(commands[cur])
+        cur+=1
+    animated = first_pass(commands)
+    second_pass(commands,frames)
+    print frames
+    print knobs
+    print "basename " +basename
+
+    for frameNum in range(frames):
+        runCommands(commands,frameNum,animated)
