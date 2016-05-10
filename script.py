@@ -141,8 +141,12 @@ def second_pass( commands, num_frames ):
             startVal = float(command[4])
             endVal = float(command[5])
             deltaFrames = 1.0 + endFrame - endVal
-            deltaVals = endVal - startVal
-            delta = deltaVals / deltaFrames
+            if endVal > startVal:
+                deltaVals = endVal - startVal
+                delta = deltaVals / deltaFrames
+            else:
+                deltaVals = startVal - endVal
+                delta = -2 * deltaVals / deltaFrames
             print endFrame
             print startFrame
 
